@@ -43,6 +43,10 @@ class SteamUserConnection extends SteamUserEnums {
 				this._ttlCache.add(`CM_DQ_${this._lastChosenCM.type}_${this._lastChosenCM.endpoint}`, 1, 1000 * 60 * 2);
 			}
 
+			// _cleanupClosedConnection marked us as logged off, which would make _doConnection bail silently
+			this._connecting = true;
+			delete this._connectionClosed;
+
 			// We save this timeout reference because it's possible that we handle connection close before we fully handle
 			// a logon response. In that case, we'll cancel this timeout when we handle the logon response.
 			// This isn't an issue in the reverse case, since a handled logon response will tear down the connection and
